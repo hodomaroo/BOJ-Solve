@@ -5,10 +5,12 @@ input = sys.stdin.readline
 t,w = map(int,input().split())
 information = [int(input()) for _ in range(t)]
 
+"""
 dp = [[[0 for _ in range(min(31,w+1))] for _ in range(t)] for _ in range(2)]
 
 dp[0][0][0] = [0,1][information[0] == 1]
 dp[1][0][1] = [0,1][information[0] == 2]
+
 
 for time in range(1,t):  #시간 순서대로 진행
     dp[0][time][0] = dp[0][time - 1][0] + [0,1][(information[time] == 1)]
@@ -21,4 +23,31 @@ for time in range(1,t):  #시간 순서대로 진행
 
 #print(*dp,sep="\n")
 print(max(max(dp[0][-1]),max(dp[1][-1])))
+#"""
+
+#개선
+#lr / cost / time
+
+dp = [[[0 for _ in range(2)] for _ in range(min(31,w+1))] for _ in range(2)]
+
+dp[0][0][0] = [0,1][information[0] == 1]
+dp[0][1][1] = [0,1][information[0] == 2]
+
+time = 0
+for time in range(1,t):  #시간 순서대로 진행
+    dp[time%2][0][0] = dp[1 - time%2][0][0] + [0,1][(information[time] == 1)]
+    dp[time%2][0][1] = dp[1 - time%2][0][1] + [0,1][(information[time] == 2)]
+
+    #print(time,w)
+    for cost in range(1,min(w,30,time)+1):
+        for lr in range(2):
+            #print(lr,time,cost)
+            dp[time%2][cost][lr] = max(max(dp[1-time%2][cost][lr],dp[1 - time % 2][cost-1][1- lr]) + [0,1][(information[time] == lr+1)],dp[time%2][cost-1][lr])
+#print(*dp,sep="\n")
+#print(dp)
+maxValue = 0
+for i in range(w+1):
+    maxValue = max(maxValue,max(dp[time%2][i]))
+print(maxValue)
+
 
