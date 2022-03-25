@@ -1,0 +1,21 @@
+from collections import Counter
+def solution(s : str) -> int:
+    answer = len(s)
+
+    for i in range(1, len(s) // 2 + 1):
+        prevWord,prevCount = "",0
+        count = 0
+
+        #문자를 i개씩 분할
+        for index in range(0,len(s),i):
+            nowWord = s[index:index+i]
+            if prevWord != nowWord:
+                count += len(prevWord) + [0,len(str(prevCount))][(prevCount > 1)]
+                prevWord = nowWord
+                prevCount = 1
+            else:
+                prevCount += 1
+        count += len(prevWord) +  (0 if prevCount == 1 else len(str(prevCount)))
+        answer = min(answer,count)
+
+    return answer
