@@ -1,0 +1,43 @@
+from typing import List
+import re
+def solution(lines : list) -> int:
+    def judgeOverlap(s,e,ts,te):
+        return s <= ts <= e or s <= te <= e or ts <= s <= te or ts <= e <= te
+
+    def convertTime(string : str) -> list:   #시간문자열 --> 숫자로 변환
+        string = string.split() #
+        print(string[1])
+        #"2016-09-15  / 01:00:04.001  / 2.0s" 시작날짜 / 끝난 시간 / cost로 구분
+        #2016 ~ 15까지는 필요없음
+
+        hmsms = list(map(int,string[1].replace(".",":").split(":")))
+        #밀리초 단위로 치환해야함
+        #1시간 --> 3600초 -> 36000밀리초
+        #1분 -- >60초 -> 600밀리초
+
+        hmsms = hmsms[0] * 3600000 + hmsms[1] * 60000 + hmsms[2] * 1000 + hmsms[3]
+        cost = list(map(int,string[2][:-1].split(".")))
+        #print(hmsms,cost)
+        cost = cost[0] * 1000 + (0 if len(cost) == 1 else cost[1])
+
+        return hmsms,hmsms - cost + 1 #끝시간 / 시작시간
+
+    answer = 1
+    startLines = []
+    for idx,timelog in enumerate(lines):
+        end,start = convertTime(timelog)
+
+        lines[idx] = (end)
+        startLines.append((start,end))
+    startLines.sort()   #시작시간 기준 정렬
+    print(lines,startLines,sep="\n")
+    last = 0
+    for i in range(len(lines)):
+        last = max(last,i)
+
+        for j in range(last+1,len(lines)):
+            #print(lines[i][0],lines[i][1],startLines[j][0],startLines[j][1])
+            if not judgeOverlap(lines[i],lines[i] + 999,startLines[j][0],startLines[j][1]): break
+            last = j
+        answer = max(answer,last - i + 1)
+    return answer
