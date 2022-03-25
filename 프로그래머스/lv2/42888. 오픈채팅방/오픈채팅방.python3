@@ -1,0 +1,23 @@
+from typing import List
+def solution(record : list) -> list:
+    log = []
+    dictionary = dict()
+
+    for cmd in record:
+        opers = cmd.split()
+        if opers[0] != "Change":
+            log.append((opers[0], opers[1]))
+
+        if len(opers) == 3:
+            dictionary[opers[1]] = opers[2]
+
+    answer = []
+    #print(dictionary)
+    for oper,uid in log:
+        if oper == "Enter":
+            answer.append(dictionary[uid] + "님이 들어왔습니다.")
+        elif oper == "Leave":
+            answer.append(dictionary[uid] + "님이 나갔습니다.")
+
+    return answer
+#print(solution(["Enter uid1234 Muzi", "Enter uid4567 Prodo","Leave uid1234","Enter uid1234 Prodo","Change uid4567 Ryan"]))
