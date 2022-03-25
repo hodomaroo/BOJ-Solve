@@ -1,8 +1,8 @@
 from typing import List
-import re
+
 def solution(lines : list) -> int:
-    def judgeOverlap(s,e,ts,te):
-        return s <= ts <= e or s <= te <= e or ts <= s <= te or ts <= e <= te
+    def judgeOverlap(s : int,e : int,ts : int,te : int)-> int:
+        return ts <= e   #d애초에 이러면 그냥 포함이 된다!
 
     def convertTime(string : str) -> list:   #시간문자열 --> 숫자로 변환
         string = string.split() #
@@ -27,7 +27,7 @@ def solution(lines : list) -> int:
     for idx,timelog in enumerate(lines):
         end,start = convertTime(timelog)
 
-        lines[idx] = (end)
+        lines[idx] = end
         startLines.append((start,end))
     startLines.sort()   #시작시간 기준 정렬
     print(lines,startLines,sep="\n")
@@ -36,7 +36,7 @@ def solution(lines : list) -> int:
         last = max(last,i)
 
         for j in range(last+1,len(lines)):
-            #print(lines[i][0],lines[i][1],startLines[j][0],startLines[j][1])
+
             if not judgeOverlap(lines[i],lines[i] + 999,startLines[j][0],startLines[j][1]): break
             last = j
         answer = max(answer,last - i + 1)
