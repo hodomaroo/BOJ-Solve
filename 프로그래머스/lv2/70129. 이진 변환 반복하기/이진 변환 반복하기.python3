@@ -1,0 +1,23 @@
+from typing import List
+from math import log2
+
+def solution(string : str) -> List:
+    answer = []
+    gen = 1
+    removedZero = 0
+
+    #전처리
+    for s in string:
+        if not int(s): removedZero += 1
+
+    ones = len(string) - removedZero
+
+    while ones != 1:
+        nextOnes = 0
+        for i in range(int(log2(ones))+1): #log개수로 접근
+            if not ones & (1 << i):   removedZero += 1
+            else: nextOnes += 1
+        ones = nextOnes
+        print(ones)
+        gen += 1
+    return [gen,removedZero]
