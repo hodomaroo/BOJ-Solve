@@ -1,20 +1,33 @@
+from bisect import bisect_left,bisect_right
+
 n = int(input())
-nums = list(map(int,input().split()))
-dp = [1] * (n)
-
-maxLen = 1
-for i in range(n):
-    for j in range(i):
-        if nums[j] < nums[i]:
-            dp[i] = max(dp[i],dp[j] + 1)
-            maxLen = max(dp[i],maxLen)
-
-#print(dp) # --> N으로 그대로 역추적
-
+numList = list(map(int,input().split()))
 stack = []
+dp = [0] * n
+
+"""
+7
+2 100 200 3 4 5 6
+"""
+
+for i in range(len(numList)):
+    v = numList[i]
+    position = bisect_left(stack, v)  # v의 위치 찾기
+    dp[i] = position
+
+    if position == len(stack):  #길이 추가
+        stack.append(v)
+
+    else:
+        stack[position] = v
+
+reveredStack = []
+searchIndex = len(stack)-1
+
 for i in range(n-1,-1,-1):
-    if dp[i] == maxLen:
-        stack.append(nums[i])
-        maxLen -= 1
-print(len(stack))
-print(*stack[::-1])
+    if searchIndex == dp[i]:
+        reveredStack.append(numList[i])
+        searchIndex -= 1
+
+print(len(reveredStack))
+print(*reveredStack[::-1])
