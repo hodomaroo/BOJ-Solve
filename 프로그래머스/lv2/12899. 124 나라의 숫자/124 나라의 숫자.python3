@@ -1,0 +1,12 @@
+#총 3개의 값을 가지므로, 3진수와 매칭 --> 해당하는 값 출력하기?
+
+matchedNumber = ["1","2","4"]
+def solution(n : int) -> int:
+    ans = []
+    while n > 0:
+        ans.append(matchedNumber[n % 3 - 1])
+        n = n // 3 - (n % 3 == 0)
+
+    return "".join(ans[::-1])
+
+
