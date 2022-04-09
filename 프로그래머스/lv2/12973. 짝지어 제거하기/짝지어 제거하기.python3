@@ -1,0 +1,13 @@
+def solution(string : str) -> bool:
+    answer = -1
+    stack = []
+
+    for s in string:
+        if not stack: stack.append(s)
+        elif stack[-1] == s:
+            stack.pop()
+        else:
+            stack.append(s)
+
+
+    return int(len(stack) == 0)
