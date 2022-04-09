@@ -1,0 +1,40 @@
+from collections import Counter
+from typing import List
+
+def solution(str1 : str, str2 : str):
+    MUL = 65536
+    def stringSet(string : str) -> list:
+        sc = Counter()
+
+        for i in range(len(string)-1):
+            s1,s2 = string[i],string[i+1]
+            if not s1.isalpha(): continue
+            if not s2.isalpha(): continue
+
+            if ord(s1) < 97:
+                s1 = chr(ord(s1) + 32)
+
+            if ord(s2) < 97:
+                s2 = chr(ord(s2) + 32)
+            sc[s1 + s2] += 1
+        return sc
+
+    sc1 = stringSet(str1)
+    sc2 = stringSet(str2)
+#    print(sc1,sc2)
+    if not sc1 and not sc2: return MUL
+
+    maxSum = 0
+    minSum = 0
+    for v in set(sc1.keys()) | set(sc2.keys()):
+        maxSum += max(sc1[v],sc2[v])
+        minSum += min(sc1[v],sc2[v])
+
+    return int(minSum / maxSum * 65536)
+
+#print(solution("aa1+aa2", "AAAA12"))
+#print(solution("FRANCE","french"))
+#print(solution("handshake","shake hands"))
+
+
+
