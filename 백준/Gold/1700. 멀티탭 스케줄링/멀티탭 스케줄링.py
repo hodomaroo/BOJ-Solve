@@ -1,4 +1,5 @@
 from collections import defaultdict,deque
+from heapq import heappop,heappush
 
 n,m = map(int,input().split())
 multiUse = set()
@@ -10,25 +11,25 @@ for i in range(len(schedule)):
     valuePos[schedule[i]].append(i)
 
 count = 0
+removeHeap = []
+
 for i,value in enumerate(schedule):
     valuePos[value].popleft() #해당 값 스택에서 제거
-
-    if value in multiUse:
+    #print(value, multiUse,removeHeap)
+    if value in multiUse or len(multiUse) < n:
+        if value not in multiUse:
+            multiUse.add(value)
+        heappush(removeHeap,(-valuePos[value][0] if valuePos[value] else -float("inf"), value))
         continue
-    elif len(multiUse) < n:
-        multiUse.add(value)
-        continue
 
-    maxVal,maxDist = 0,0
+    while removeHeap:
+        pos,val = heappop(removeHeap)
+        if val == value or val not in multiUse or abs(pos) < i: continue #이전의 가비지값 or
+        break
 
-    for v in multiUse:
-        dist = (valuePos[v][0] - i) if valuePos[v] else float("inf")
-        if maxDist < dist:
-            maxDist = dist
-            maxVal = v
-
-    multiUse.remove(maxVal)
+    multiUse.remove(val)
+    heappush(removeHeap, (-valuePos[value][0] if valuePos[value] else -float("inf"), value))
     multiUse.add(value)
     count += 1
-#print(multiUse)
+
 print(count)
