@@ -1,30 +1,31 @@
 import sys
-from collections import  deque
 
 input = sys.stdin.readline
 
-N,M = list(map(int,input().split()))
-graph = [[] for _ in range(N+1)]
-timeflow = [1 for _ in range(N+1)]
-indegree = [0 for _ in range(N+1)]
+n,m = map(int,input().split())
+graph = [[] for _ in range(n+1)]
+indegree = [0] * (n + 1) #indegree가 0인 애로 시작
+dp = [0] * (n + 1)
 
-for _ in range(M):
-    f,t = list(map(int, input().split()))
-    graph[f].append(t)
-    indegree[t] += 1
+def dfs(node : int) -> int:
+    if dp[node]: return dp[node]
 
-queue = deque()
-for i in range(1,N+1):
-    if not indegree[i]:
-       queue.append(i)
+    for nextnode in graph[node]:
+        dp[node] = max(dp[node],dfs(nextnode)+1)
 
-while queue:
-    now = queue.popleft()
+    dp[node] = max(dp[node],1)
+    return dp[node]
 
-    for next in graph[now]:
-        indegree[next] -= 1
-        if not indegree[next]:
-            queue.append(next)
-            timeflow[next] = timeflow[now] + 1
+for i in range(m):
+    f,t = map(int,input().split())
+    graph[t].append(f) #t를 더 먼저
+    indegree[f] += 1
 
-print(*timeflow[1:])
+ans = 0
+for i in range(1,n+1):
+    if not indegree[i]: dfs(i)
+
+print(*dp[1:])
+
+
+
