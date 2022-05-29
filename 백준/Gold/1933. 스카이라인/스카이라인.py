@@ -19,12 +19,9 @@ for pos,height in nodes:
         if heap and abs(heap[0]) < height:
             print(pos,height,end=" ")
 
-        heappush(heap,-height)
+        heappush(heap, -height)
         counter[height] += 1
     else:
-        while heap and not counter[-heap[0]]:
-            heappop(heap)  # 없어진 값은 그냥 제거하기
-
         counter[-height] -= 1 #카운터 감소시키기
 
         if heap and not counter[-heap[0]]:
