@@ -1,14 +1,5 @@
 n = int(input())
 flowers = []
-dateDict = {}
-
-for v in [1,3,5,7,8,10,12]:
-    dateDict[v] = 31
-
-for v in [4, 6, 9, 11]:
-    dateDict[v] = 30
-
-dateDict[2] = 28
 
 for _ in range(n):
     inform = list(map(int, input().split()))
