@@ -19,22 +19,19 @@ def bfs(start : int, groupCode : int):
                 queue.append((nx, ny))
     groupSize.append(curSize)
 
-
 m,n = map(int,input().split())
 board = [list(map(int,input().split())) for _ in range(n)]
 visit = [[False] * m for _ in range(n)]
 group = [[0] * m for _ in range(n)]
 groupSize = [0]
-
 biggestUnionedRoom = 0
-for i in range(n):
-    for j in range(m):
-        if group[i][j]: continue
-        bfs((i, j), len(groupSize))
 
 for x in range(n):
     for y in range(m):
-        for d in [1,2]:
+        if not group[x][y]:
+            bfs((x, y), len(groupSize))
+
+        for d in range(2):
             nx, ny = x + dx[d], y + dy[d]
             if 0 <= nx < n and 0 <= ny < m and group[nx][ny] != group[x][y]:
                 biggestUnionedRoom = max(biggestUnionedRoom, groupSize[group[x][y]] + groupSize[group[nx][ny]])
