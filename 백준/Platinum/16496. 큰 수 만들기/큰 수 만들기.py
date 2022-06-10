@@ -6,4 +6,6 @@ def compare(a : str, b : str) -> int:
 n = int(input())
 nums = input().split()
 nums.sort(key=cmp_to_key(compare))
-print(int("".join(nums)))
+
+print("".join(nums) if nums[0] != "0" else 0)
+
