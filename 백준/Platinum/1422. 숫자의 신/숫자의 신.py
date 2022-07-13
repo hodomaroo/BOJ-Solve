@@ -1,17 +1,16 @@
+import sys
 from functools import cmp_to_key
 
-def cmp(a : str, b : str):
-    return [-1, 1][a + b > b + a]
+input = sys.stdin.readline
 
+def cmp(a : int, b : int):
+    return [-1, 1][str(a) + str(b) > str(b) + str(a)]
 
 k, n = map(int,input().split())
-numbers = sorted([input() for _ in range(k)], key = cmp_to_key(cmp), reverse=True)
-
-max_value = 0
-for v in numbers:
-    max_value = max(max_value, int(v))
+numbers = sorted([int(input()) for _ in range(k)], key = cmp_to_key(cmp), reverse=True)
+max_value = max(numbers)
 
 for v in numbers:
-    print(v if v != str(max_value) else v * (1 + n - k), end="")
-    if v == str(max_value):
+    print(v if v != max_value else str(v) * (1 + n - k), end="")
+    if v == max_value:
         k = n
