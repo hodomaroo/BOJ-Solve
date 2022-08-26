@@ -31,6 +31,7 @@ availableList.append(i)
 """
 
 for v in range(1, n + 1):
-    if (n % v == 0 and fail[-1] % v == 0 and n // v == fail[-1] // v + 1) or v == n:
-        print(1,"/",v, sep = "")
-        exit(0)
+    if v != n and (n % v or fail[-1] % v or (n // v != (fail[-1] // v + 1))): continue
+    
+    print(1,"/",v, sep = "")
+    exit(0)
