@@ -2,11 +2,11 @@ from collections import deque
 from typing import List
 def solution(board : List[List[int]]):
     n = len(board)
-    dx,dy = [-1,0,1,0],[0,1,0,-1]
-    dp = [[[0] * 4 for _ in range(n)] for _ in range(n)]
+    dx,dy = [0,1,0,-1],[1,0,-1,0]
+    dp = [[[0] * 2 for _ in range(n)] for _ in range(n)]
     
     def getMainPoint(x : int, y : int, d : int) -> List[int]: #x,y,d
-        if d % 3 == 0: #0 or 3(위 or 왼쪽을 바라보는 경우) 
+        if d >= 2: #0 or 3(위 or 왼쪽을 바라보는 경우) 
             x,y,d = x + dx[d],y + dy[d],(d + 2) % 4
         return x,y,d
     
@@ -14,12 +14,11 @@ def solution(board : List[List[int]]):
         return 0 <= x < n and 0 <= y < n and not board[x][y]
     
     #0 1 2 3 위 오른쪽 아래 왼쪽
-    dp[0][0][1] = 1
-    queue = deque([(0,0,1)])
+    dp[0][0][0] = 1
+    queue = deque([(0,0,0)])
     
     while queue:
         x,y,d = getMainPoint(*queue.popleft()) #포인트는 무조건 왼쪽 / 위쪽 포인트로 기술
-        #print(x,y,d, dp[x][y][d])
         xx,yy = x + dx[d], y + dy[d]
         
         if (xx,yy) == (n-1, n-1):
@@ -37,5 +36,5 @@ def solution(board : List[List[int]]):
                         if not dp[rx][ry][rd]:
                             queue.append((rx,ry,rd))
                             dp[rx][ry][rd] = dp[x][y][d] + 1
-
+    print(dp)
     return dp[x][y][d] - 1
