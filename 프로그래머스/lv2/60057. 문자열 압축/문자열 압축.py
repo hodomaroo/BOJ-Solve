@@ -1,38 +1,21 @@
-# 2022-06-06
-# 2022-07-29
-# 문자열 압축
-def solution(s):
-    answer = 1000
-    # 체크할 길이
-    for i in range(1, len(s) + 1):
-        temp_str = []
-        temp = ""
-        cnt = 1
-        #print(i)
-        for j in range(0, len(s), i):
-            string = s[j:j+i]
+
+def solution(string : str):
+    minLength = len(string)#개수 표시
+    
+    def zipString(string : str, length : int) -> int:
+        stack = []
+        for i in range(0,len(string), length):
+            st = string[i:i + length]
             
-            if not temp or temp != string:
-                if temp:
-                    if cnt > 1:
-                        temp_str.append(str(cnt))
-                    temp_str.append(temp)
-            
-                temp = string
-                cnt = 1
-            
+            if not stack or st != stack[-1][0]:
+                stack.append([string[i:i + length], 1])
             else:
-                cnt += 1
-                
-        #print(i,temp_str)
+                stack[-1][1] += 1
+        return sum(len(v1) + len(str(v2)) - (v2 == 1)  for v1,v2 in stack)
         
-        if cnt > 1:
-            temp_str.append(str(cnt))
-        temp_str.append(temp)
-        answer = min(len("".join(temp_str)), answer)
         
-        # /체크 
-    return answer
-
-
-#solution("aabbaccc")
+    for i in range(1,len(string) // 2 + 1):
+        minLength = min(minLength, zipString(string, i))
+    
+    
+    return minLength
