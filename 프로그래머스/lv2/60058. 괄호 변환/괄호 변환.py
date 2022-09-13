@@ -1,41 +1,33 @@
-
-
 def solution(p : str):
-    def checkCorrect(p : str) -> bool:
+    def isCorrectString(string : str) -> bool:
         count = 0
-        for v in p:
-            if v == "(":
-                count += 1
-            else:
-                count -= 1
-            if count < 0:   return False
+        for s in string:
+            count += [1,-1][s == ")"]
+            
+            if count < 0:
+                return False
+            
         return True
     
-    def convertString(string : str) -> str:
-        return "".join([")","("][v == ")"] for v in string)
+    def reverseString(string : str) -> str:
+        return "".join([[")","("][s == ")"]  for s in string])
     
-    def dfs(string : str):
-        print(string)
-        if not string:
-            return ""
+    def fixString(string : str) -> str:
+        if string == "": return ""       
         
-        count = 0
-        for i in range(len(string)):
-            if string[i] == "(":
-                count += 1
-            else:
-                count -= 1
-                
-            if not count and i:
-                break
-                
-        front = string[:i+1]
-        res = dfs(string[i+1:])
-        print("dd" ,i,front,res, convertString(front[1:-1]))
-        if checkCorrect(front):
-            return front + res
+        count = 0 #((()))
+        for i in range(len(string)): 
+            count += [1,-1][string[i] == ")"]
+            
+            if not count: break
         
-        return "(" + res + ")" + convertString(front[1:-1])
-    return dfs(p)            
-        
+        uString = string[:i+1]
+        vString = string[i+1:]
+
+        if isCorrectString(uString):
+            return uString + fixString(vString)
     
+        return "(" + fixString(vString) + ")" + reverseString(uString[1:-1])
+    return fixString(p)
+        
+                
