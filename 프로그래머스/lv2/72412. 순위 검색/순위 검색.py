@@ -1,43 +1,40 @@
-from bisect import bisect_right
-
-class Node:
-    def __init__(self):
-        self.child = {}
-        self.val = []
+from bisect import bisect_left
 
 def solution(info, query):
-    datas = [["java","cpp","python"],["backend","frontend"],["chicken","pizza"]]
+    class TreeNode:
+        def __init__(self): 
+            self.child = {}
+            self.count = 0
     
-    index = [3,2,2]
-    
-    def insert(node : Node, inform : list, depth : int):
-        if depth == 3:
-            node.val.append(inform[-1])
-            print(node.val)
-            return 
+    def tree(node : TreeNode, info : int, depth : int):
+        node.count += 1
+        if depth == 4:  return 
         
-        if inform[depth] not in node.child:
-            node.child[inform[depth]] = Node()
-        insert(node.child[inform[depth]], inform, depth + 1)
+        if info[depth] not in node.child:
+            node.child[info[depth]] = TreeNode()
+        tree(node.child[info[depth]], info, depth + 1)
     
-    def search(node : Node, inform : list, depth):
-        if depth == 3:
-            return bisect_right(node.val, inform[-1])
+    def traverse(node : TreeNode, info, depth : int):
+        if depth == 4:
+            return node.count
         
-        count = 0
-        if inform[depth] == "-":
-            for v in datas[depth]:
-                if v not in node.child: continue
-                count += search(node.child[v], inform, depth + 1)
-        
-        return count
+        if info[depth] == "-":
+            return sum(traverse(childNode, info, depth + 1) for childNode in node.child.values())
+        return traverse(node.child[info[depth]], info, depth + 1) if (info[depth] in node.child) else 0
     
-    root = Node()
-    for inform in info:
-        insert(root, inform, 0)
+    query = [[i] + query[i].split() for i in range(len(query))]
+    info = [inform.split() for inform in info]
     
-    answer = []
-    for q in query:
-        answer.append(search(root, q.split()[0::2],0))
+    ans = [0] * len(query)
     
-    return answer
+    Tree = TreeNode()
+    
+    for inform in sorted(info + query, key = lambda x : (-int(x[-1]), len(x))):
+        if len(inform) == 9:            
+            ans[int(inform[0])] = traverse(Tree, inform[1::2] + [inform[0]], 0)
+            
+        else:
+            tree(Tree, inform, 0)
+    
+    return ans
+    
