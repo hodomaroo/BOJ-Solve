@@ -8,7 +8,7 @@
 
 ### 분류
 
-자료 구조(data_structures), 세그먼트 트리(segtree)
+세그먼트 트리(segtree), 자료 구조(data_structures)
 
 ### 문제 설명
 
